@@ -1,0 +1,20 @@
+{
+  "name": "news-scrape",
+  "version": "1.0.0",
+  "description": "A nice little tool to scrape news stories from a chosen news site and save them. Also gives use the ability to write notes for each article",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gbeitakiser/news-scrape.git"
+  },
+  "author": "Gabriel Beita-Kiser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gbeitakiser/news-scrape/issues"
+  },
+  "homepage": "https://github.com/gbeitakiser/news-scrape#readme"
+}
