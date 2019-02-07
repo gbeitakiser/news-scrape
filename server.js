@@ -13,7 +13,7 @@ var PORT = 3000;
 
 var app = express();
 
-    app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(express.static("public"));  <---- Do I need this??
 
@@ -22,31 +22,33 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-mongoose.connect("mongodb://localhost/news-scraper", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser: true });
 
 
 // Route
 
 app.get("/scrape", function(req, res) {
-    axios.get("https://www.goodnewsnetwork.org/category/news/").then(function(response) {
+    axios.get("https://www.sunnyskyz.com/good-news").then(function(response) {
         var $ = cheerio.load(response.data);
 
-    $("h3.entry-title").each(function(i, element) {
+    $("a.newslist").each(function(i, element) {
 
         var result = {};
 
-        var title = $(element).text();
-        var link = $(element).children().attr("href");
+        result.headline = $(this).children('.titlenews').text();
+        result.link = $(this).attr("href");
+        result.summary = $(this).children('.intronews').text();
+        result.image = $(this).children("img").attr("src");
 
-        result.headline = $(this).children("a").text();
-        result.link = $(this).children("a").attr("href");
-            // Need a summary section too.
-            // Image URL would be nice as well.
-        
-
-    })
-    console.log(result);
-})
+        db.Article.create(result)
+            .then(function(dbnewsScraper) {
+                console.log(dbnewsScraper);
+            }).catch(function(err) {
+                console.log(err);
+            });
+    });
+        res.send("Scrape Complete")
+    });
 });
 
 
