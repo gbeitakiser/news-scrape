@@ -9,13 +9,13 @@ var cheerio = require("cheerio");
 var db = require("./models");
 
 // Connection
-var PORT = 3000;
+var PORT = process.env.PORT ||3000;
 
 var app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(express.static("public"));  <---- Do I need this??
+app.use(express.static("public"));  // <---- Do I need this??
 
 // Handlebars
 var exphbs = require("express-handlebars");
@@ -26,30 +26,53 @@ mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser: true });
 
 
 // Route
+// Show Database
+app.get("/", function(req, res) {
+    res.render("index");
+});
 
+
+var results = [];
+
+// First scrape site for articles...
 app.get("/scrape", function(req, res) {
     axios.get("https://www.sunnyskyz.com/good-news").then(function(response) {
         var $ = cheerio.load(response.data);
 
     $("a.newslist").each(function(i, element) {
-
-        var result = {};
+        var result = {}
 
         result.headline = $(this).children('.titlenews').text();
         result.link = $(this).attr("href");
         result.summary = $(this).children('.intronews').text();
-        result.image = $(this).children("img").attr("src");
+
+        results.push(result)
 
         db.Article.create(result)
             .then(function(dbnewsScraper) {
-                console.log(dbnewsScraper);
+                console.log("Article saved to database.");
             }).catch(function(err) {
                 console.log(err);
             });
-    });
-        res.send("Scrape Complete")
-    });
+    })
+    res.render("index", {
+        articles: results
+    })
+    })    
 });
+
+
+
+app.get("/show", function(req, res) {
+    // // ...then render results on page
+    db.Article.find({})
+      .then(function(dbnewsScraper) {
+        res.json(dbnewsScraper);
+      })
+      .catch(function(err) {
+        res.json(err);
+      });
+  });
 
 
 
