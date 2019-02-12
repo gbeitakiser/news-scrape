@@ -1,7 +1,7 @@
 $.getJSON("/show", function(data) {
     for (var i = 0; i < data.length; i++) {
       // Change this to reflect handlebars
-      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].headline + "<br />" + data[i].summary + "<br />" + data[i].link + "</p>");
+      $("#articles").append("<h3>Article:</h3><p data-id='" + data[i]._id + "'>" + data[i].headline + "</br>" + data[i].summary + "<br/><a href='" + data[i].link + "'>Link</a>");
     }
   });
 

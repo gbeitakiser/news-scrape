@@ -64,7 +64,7 @@ app.get("/scrape", function(req, res) {
         var result = {}
 
         result.headline = $(this).children('.titlenews').text();
-        result.link = $(this).attr("href");
+        result.link = "https://www.sunnyskyz.com" + $(this).attr("href");
         result.summary = $(this).children('.intronews').text();
         checker = checkerArray.includes(result.headline)
 
