@@ -22,11 +22,12 @@ var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
-mongoose.connect("mongodb://localhost/newsScraper", { useNewUrlParser: true });
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/newsScraper";
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 
 // Route
-// Show Database
+// Show index.handlebars. app.js triggers "show" route to render data on page.
 app.get("/", function(req, res) {
     res.render("index");
 });
