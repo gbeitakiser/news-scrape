@@ -37,8 +37,28 @@ var results = [];
 
 // First scrape site for articles...
 app.get("/scrape", function(req, res) {
+
+
+    // First load database and store articles to later check and ensure we're not adding duplicates
+    var checker;
+    var checkerArray = []
+
+    db.Article.find({})
+        .then(function(scrape1) {
+            // console.log(scrape1 + "\n")
+            scrape1.forEach(function(isThere) {
+                checkerArray.push(isThere.headline)
+            })
+            console.log(checkerArray);
+        })
+
+    // Then scrape
     axios.get("https://www.sunnyskyz.com/good-news").then(function(response) {
         var $ = cheerio.load(response.data);
+
+        
+
+
 
     $("a.newslist").each(function(i, element) {
         var result = {}
@@ -46,15 +66,19 @@ app.get("/scrape", function(req, res) {
         result.headline = $(this).children('.titlenews').text();
         result.link = $(this).attr("href");
         result.summary = $(this).children('.intronews').text();
+        checker = checkerArray.includes(result.headline)
 
-        results.push(result)
+        if (!checker) {
+            results.push(result)
+        
 
         db.Article.create(result)
             .then(function(dbnewsScraper) {
-                console.log("Article saved to database.");
+                console.log("\n Article saved to database.");
             }).catch(function(err) {
                 console.log(err);
             });
+        }
     })
     res.render("index", {
         articles: results
