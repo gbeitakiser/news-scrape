@@ -1,34 +1,34 @@
 $.getJSON("/show", function(data) {
     for (var i = 0; i < data.length; i++) {
       // Change this to reflect handlebars
-      $("#articles").append("<h3>Article:</h3><p data-id='" + data[i]._id + "'>" + data[i].headline + "</br>" + data[i].summary + "<br/><a href='" + data[i].link + "'>Link</a>");
+      $("#article").append("<h3>Article:</h3><p data-id='" + data[i]._id + "'>" + data[i].headline + "</br>" + data[i].summary + "<br/><a href='" + data[i].link + "'>Link</a></br><button class='note' id='" + data[i]._id + "'>Notes</button>");
     }
   });
 
 
   // Whenever someone clicks a p tag
-$(document).on("click", "p", function() {
+$(document).on("click", "#note", function() {
     // Empty the notes from the note section
-    $("#notes").empty();
+    $("#note").empty();
     // Save the id from the p tag
     var thisId = $(this).attr("data-id");
   
     // Now make an ajax call for the Article
     $.ajax({
       method: "GET",
-      url: "/articles/" + thisId
+      url: "/note/" + thisId
     })
       // With that done, add the note information to the page
       .then(function(data) {
         console.log(data);
         // The title of the article
-        $("#notes").append("<h2>" + data.title + "</h2>");
+        $("#note").append("<h2>" + data.title + "</h2>");
         // An input to enter a new title
-        $("#notes").append("<input id='titleinput' name='title' >");
+        $("#note").append("<input id='titleinput' name='title' >");
         // A textarea to add a new note body
-        $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+        $("#note").append("<textarea id='bodyinput' name='body'></textarea>");
         // A button to submit a new note, with the id of the article saved to it
-        $("#notes").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+        $("#note").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
   
         // If there's a note in the article
         if (data.note) {
@@ -48,7 +48,7 @@ $(document).on("click", "p", function() {
     // Run a POST request to change the note, using what's entered in the inputs
     $.ajax({
       method: "POST",
-      url: "/articles/" + thisId,
+      url: "/note/" + thisId,
       data: {
         // Value taken from title input
         title: $("#titleinput").val(),

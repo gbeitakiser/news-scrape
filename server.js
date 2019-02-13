@@ -56,10 +56,6 @@ app.get("/scrape", function(req, res) {
     axios.get("https://www.sunnyskyz.com/good-news").then(function(response) {
         var $ = cheerio.load(response.data);
 
-        
-
-
-
     $("a.newslist").each(function(i, element) {
         var result = {}
 
@@ -68,10 +64,11 @@ app.get("/scrape", function(req, res) {
         result.summary = $(this).children('.intronews').text();
         checker = checkerArray.includes(result.headline)
 
+        // Make sure the article isn't already in database by checking against duplicates array
         if (!checker) {
             results.push(result)
-        
 
+        // If it isn't, send it to the DB
         db.Article.create(result)
             .then(function(dbnewsScraper) {
                 console.log("\n Article saved to database.");
@@ -84,6 +81,44 @@ app.get("/scrape", function(req, res) {
         articles: results
     })
     })    
+});
+
+app.get("/note/:id", function(req, res) {
+    db.Article.findOne({ _id: req.params.id })
+      .populate("note")
+      .then(function(dbArticle) {
+          console.log(dbArticle) //modify
+          res.render("note", {
+              data: dbArticle
+          })
+      })
+      .catch(function(err) {
+          res.json(err)
+      });
+})
+
+
+app.post("/note/:id", function(req, res) {
+    db.Article.create(req.body)
+        .then(function(dbNote) {
+            db.Article.findByIdAndUpdate(
+                {
+                _id: req.params._id
+            },
+            {
+                    $push: {
+                        note: dbNote._id
+                    }
+            },
+            {
+                new: true
+            })
+            .then(function(dbArticle) {
+                res.json(dbArticle)
+            })
+        }).catch(function(err) {
+            res.json(err);
+        })
 });
 
 
