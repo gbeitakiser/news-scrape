@@ -1,5 +1,17 @@
-<li id="article">
-    <h3>Article: {{data[i].headline}}</h3>
-    
+<ul id="{{_id}}">
+    <h3><a href="{{link}}">{{headline}}</a></h3>
+    <p>{{summary}}</p>
 
-</li>
+    <div id="userinput">
+        <p>Note</p>
+        <textarea id="note"></textarea>
+      <div id="buttons">
+        <div id="actionbutton">
+          <button id="makenew">Submit</button>
+        </div>
+        <button id="clearall">Delete All Notes</button>
+      </div>
+    </div>
+</ul>
+<br>
+<br>

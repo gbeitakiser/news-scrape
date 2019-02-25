@@ -1,6 +1,8 @@
-<div id="wrapper">
+<div class="wrapper">
       <h1>Positive News Articles...Have A Nice Day!</h1>
-      <div id="article">
-        
+      <div id="articles">
+            {{#each articles}}
+                  {{> notes/notes-block }}
+            {{/each}}
       </div>
 </div>

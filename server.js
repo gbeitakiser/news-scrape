@@ -29,7 +29,12 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // Route
 // Show index.handlebars. app.js triggers "show" route to render data on page.
 app.get("/", function(req, res) {
-    res.render("index");
+    db.Article.find({})
+        .then(function(dbArticle) {
+            res.render("index", {
+                articles: dbArticle
+            });
+        })
 });
 
 
@@ -101,14 +106,13 @@ app.get("/note/:id", function(req, res) {
 app.post("/note/:id", function(req, res) {
     db.Article.create(req.body)
         .then(function(dbNote) {
-            db.Article.findByIdAndUpdate(
-                {
+            db.Article.findOneAndUpdate({
                 _id: req.params._id
             },
             {
-                    $push: {
-                        note: dbNote._id
-                    }
+                $push: {
+                    note: dbNote._id
+                }
             },
             {
                 new: true
@@ -123,16 +127,16 @@ app.post("/note/:id", function(req, res) {
 
 
 
-app.get("/show", function(req, res) {
-    // // ...then render results on page
-    db.Article.find({})
-      .then(function(dbnewsScraper) {
-        res.json(dbnewsScraper);
-      })
-      .catch(function(err) {
-        res.json(err);
-      });
-  });
+// app.get("/show", function(req, res) {
+//     // // ...then render results on page
+//     db.Article.find({})
+//       .then(function(dbnewsScraper) {
+//         res.json(dbnewsScraper);
+//       })
+//       .catch(function(err) {
+//         res.json(err);
+//       });
+//   });
 
 
 
