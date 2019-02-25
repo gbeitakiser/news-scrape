@@ -1,18 +1,9 @@
-  
-// $.getJSON("/show", function(data) {
-//   for (var i = 0; i < data.length; i++) {
-//     // Change this to reflect handlebars
-//     $("#article").append("<h3>Article</h3><p data-id='" + data[i]._id + "'>" + data[i].headline + "</br>" + data[i].summary + "<br/><a href='" + data[i].link + "'>Link</a></br><button class='note' id='" + data[i]._id + "'>Notes</button>");
-//   }
-// });
-
-
 $(function() {
 
   $(document).on("click", ".note", function() {
     console.log("Click works");
       $(".note").empty();
-      var articleID = $(this).attr("data-id");
+      var articleID = $(this).attr("data-id"); //Change
     
       $.ajax({
         method: "GET",
@@ -33,23 +24,20 @@ $(function() {
         });
     });
     
-    $(document).on("click", "#savenote", function() {
+    $(document).on("click", "#makenew", function() {
+      event.preventDefault()
+
       var articleID = $(this).attr("data-id");
-    
+      var note = $("#bodyInput").val();
+  
       $.ajax({
         method: "POST",
         url: "/note/" + articleID,
-        data: {
-          title: $("#titleinput").val(),
-          body: $("#bodyinput").val()
-        }
+        data: note
       })
         .then(function(data) {
-          console.log(data);
-          $("#notes").empty();
+          // console.log(data);
         });
-    
-      $("#titleinput").val("");
-      $("#bodyinput").val("");
+      $("#bodyInput").val("");
     });
 })

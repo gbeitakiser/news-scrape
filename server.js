@@ -104,7 +104,7 @@ app.get("/note/:id", function(req, res) {
 
 
 app.post("/note/:id", function(req, res) {
-    db.Article.create(req.body)
+    db.Note.create(req.body)
         .then(function(dbNote) {
             db.Article.findOneAndUpdate({
                 _id: req.params._id
@@ -121,6 +121,7 @@ app.post("/note/:id", function(req, res) {
                 res.json(dbArticle)
             })
         }).catch(function(err) {
+            console.log("error here")
             res.json(err);
         })
 });
