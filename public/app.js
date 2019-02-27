@@ -28,15 +28,20 @@ $(function() {
       event.preventDefault()
 
       var articleID = $(this).attr("data-id");
-      var note = $("#bodyInput").val();
+
+      var notesBody = {};
+
+
+      notesBody.body = $("#bodyInput").val();
+      console.log(notesBody);
   
       $.ajax({
         method: "POST",
         url: "/note/" + articleID,
-        data: note
-      })
-        .then(function(data) {
-          // console.log(data);
+        data: notesBody
+      }).then(function(data) {
+          console.log(data);
+          // window.location.replace("/note/" + data._id)
         });
       $("#bodyInput").val("");
     });

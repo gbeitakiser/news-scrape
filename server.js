@@ -39,6 +39,7 @@ app.get("/", function(req, res) {
 
 
 var results = [];
+var showLatestScrape = [];
 
 // First scrape site for articles...
 app.get("/scrape", function(req, res) {
@@ -69,6 +70,8 @@ app.get("/scrape", function(req, res) {
         result.summary = $(this).children('.intronews').text();
         checker = checkerArray.includes(result.headline)
 
+        showLatestScrape.push(result);
+
         // Make sure the article isn't already in database by checking against duplicates array
         if (!checker) {
             results.push(result)
@@ -83,31 +86,33 @@ app.get("/scrape", function(req, res) {
         }
     })
     res.render("index", {
-        articles: results
+        articles: showLatestScrape
     })
     })    
 });
 
-app.get("/note/:id", function(req, res) {
-    db.Article.findOne({ _id: req.params.id })
-      .populate("note")
-      .then(function(dbArticle) {
-          console.log(dbArticle) //modify
-          res.render("note", {
-              data: dbArticle
-          })
-      })
-      .catch(function(err) {
-          res.json(err)
-      });
-})
+// app.get("/note/:id", function(req, res) {
+//     db.Article.findOne({ _id: req.params.id })
+//       .populate("note")
+//       .then(function(dbArticle) {
+//           console.log(dbArticle) //modify
+//           res.render("note", {
+//               data: dbArticle
+//           })
+//       })
+//       .catch(function(err) {
+//           res.json(err)
+//       });
+// })
 
 
 app.post("/note/:id", function(req, res) {
     db.Note.create(req.body)
         .then(function(dbNote) {
+            console.log("req.params._id: " + req.params._id + "\n");
+            console.log("dbNote._id: " + dbNote._id + "\n");
             db.Article.findOneAndUpdate({
-                _id: req.params._id
+                _id: req.params.id
             },
             {
                 $push: {
@@ -119,26 +124,16 @@ app.post("/note/:id", function(req, res) {
             })
             .then(function(dbArticle) {
                 res.json(dbArticle)
+                // console.log(".then function worked")
+            }).catch(function(err) {
+                // console.log("error 1")
+                res.json(err);
             })
         }).catch(function(err) {
-            console.log("error here")
+            // console.log("error 2")
             res.json(err);
         })
 });
-
-
-
-// app.get("/show", function(req, res) {
-//     // // ...then render results on page
-//     db.Article.find({})
-//       .then(function(dbnewsScraper) {
-//         res.json(dbnewsScraper);
-//       })
-//       .catch(function(err) {
-//         res.json(err);
-//       });
-//   });
-
 
 
 // Start the server

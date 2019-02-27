@@ -1,18 +1,31 @@
 <ul id="article">
-    <h3><a href="{{link}}">{{headline}}</a></h3>
+    <h3>{{headline}}</h3>
     <p>{{summary}}</p>
 
+    <a href="{{link}}">Link</a>
+
     <div id="userinput">
-        <b>Note</b>
+        <b>Add Note</b>
         <br>
         <textarea id="bodyInput"></textarea>
       <div id="buttons">
         <div id="actionbutton">
           <button id="makenew" data-id="{{_id}}">Submit</button>
         </div>
-        <button id="clearall">Delete</button>
+        {{!-- <button id="clearall">Delete</button> --}}
       </div>
     </div>
+    {{#if note}}
+     {{!-- <p>{{note}}</p> --}}
+     <b>Existing Notes</b>
+        {{!-- <ul id="existing-notes"> --}}
+            {{#each note}}
+                <p>{{this}}</p>
+            {{/each}}
+        {{!-- </ul> --}}
+    {{else}}
+    <p>This article has no comments</p>
+    {{/if}}
 </ul>
 <br>
 <br>
