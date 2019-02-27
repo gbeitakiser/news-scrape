@@ -31,7 +31,6 @@ $(function() {
 
       var notesBody = {};
 
-
       notesBody.body = $("#bodyInput").val();
       console.log(notesBody);
   
@@ -41,7 +40,7 @@ $(function() {
         data: notesBody
       }).then(function(data) {
           console.log(data);
-          // window.location.replace("/note/" + data._id)
+          window.location.replace("/note/" + data._id)
         });
       $("#bodyInput").val("");
     });

@@ -91,19 +91,17 @@ app.get("/scrape", function(req, res) {
     })    
 });
 
-// app.get("/note/:id", function(req, res) {
-//     db.Article.findOne({ _id: req.params.id })
-//       .populate("note")
-//       .then(function(dbArticle) {
-//           console.log(dbArticle) //modify
-//           res.render("note", {
-//               data: dbArticle
-//           })
-//       })
-//       .catch(function(err) {
-//           res.json(err)
-//       });
-// })
+app.get("/note/:id", function(req, res) {
+    db.Article.findOne({ _id: req.params.id })
+      .populate("note")
+      .then(function(dbArticle) {
+          console.log(dbArticle)
+          res.json(dbArticle);
+      })
+      .catch(function(err) {
+          res.json(err)
+      });
+})
 
 
 app.post("/note/:id", function(req, res) {

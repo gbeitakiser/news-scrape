@@ -20,7 +20,8 @@
      <b>Existing Notes</b>
         {{!-- <ul id="existing-notes"> --}}
             {{#each note}}
-                <p>{{this}}</p>
+                <a href="/note/{{_id}}">{{_id}}</a>
+                <br>
             {{/each}}
         {{!-- </ul> --}}
     {{else}}
