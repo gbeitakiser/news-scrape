@@ -8,22 +8,18 @@
         <b>Add Note</b>
         <br>
         <textarea id="bodyInput"></textarea>
-      <div id="buttons">
-        <div id="actionbutton">
+        <br>
           <button id="makenew" data-id="{{_id}}">Submit</button>
-        </div>
         {{!-- <button id="clearall">Delete</button> --}}
-      </div>
     </div>
     {{#if note}}
-     {{!-- <p>{{note}}</p> --}}
      <b>Existing Notes</b>
-        {{!-- <ul id="existing-notes"> --}}
+     <br>
+     <br>
             {{#each note}}
-                <a href="/note/{{_id}}">{{_id}}</a>
+                <u id="note-click" note-id="{{_id}}">Click Here To See Note</u>
                 <br>
             {{/each}}
-        {{!-- </ul> --}}
     {{else}}
     <p>This article has no comments</p>
     {{/if}}

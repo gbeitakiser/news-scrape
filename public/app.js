@@ -1,28 +1,28 @@
 $(function() {
 
-  $(document).on("click", ".note", function() {
-    console.log("Click works");
-      $(".note").empty();
-      var articleID = $(this).attr("data-id"); //Change
+  // $(document).on("click", ".note", function() {
+  //   console.log("Click works");
+  //     $(".note").empty();
+  //     var articleID = $(this).attr("data-id"); //Change
     
-      $.ajax({
-        method: "GET",
-        url: "/note/" + articleID
-      })
-        .then(function(data) {
-          console.log(data);
+  //     $.ajax({
+  //       method: "GET",
+  //       url: "/note/" + articleID
+  //     })
+  //       .then(function(data) {
+  //         console.log(data);
 
-          $("#note").append("<h2>" + data.title + "</h2>");
-          $("#note").append("<input id='titleinput' name='title' >");
-          $("#note").append("<textarea id='bodyinput' name='body'></textarea>");
-          $("#note").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
+  //         $("#note").append("<h2>" + data.title + "</h2>");
+  //         $("#note").append("<input id='titleinput' name='title' >");
+  //         $("#note").append("<textarea id='bodyinput' name='body'></textarea>");
+  //         $("#note").append("<button data-id='" + data._id + "' id='savenote'>Save Note</button>");
     
-          if (data.note) {
-            $("#titleinput").val(data.note.title);
-            $("#bodyinput").val(data.note.body);
-          }
-        });
-    });
+  //         if (data.note) {
+  //           $("#titleinput").val(data.note.title);
+  //           $("#bodyinput").val(data.note.body);
+  //         }
+  //       });
+  //   });
     
     $(document).on("click", "#makenew", function() {
       event.preventDefault()
@@ -31,17 +31,29 @@ $(function() {
 
       var notesBody = {};
 
-      notesBody.body = $("#bodyInput").val();
-      console.log(notesBody);
+      notesBody.body = $(this).parent().children("#bodyInput").val();
+
   
       $.ajax({
         method: "POST",
         url: "/note/" + articleID,
         data: notesBody
       }).then(function(data) {
-          console.log(data);
           window.location.replace("/note/" + data._id)
         });
-      $("#bodyInput").val("");
     });
+
+
+    $(document).on("click", "#note-click", function() {
+      event.preventDefault();
+
+      var noteID = $(this).attr("note-id");
+
+      $.ajax({
+        method: "GET",
+        url: "/note/api/" + noteID
+      }).then(function(data) {
+        window.location.replace("/note/api/" + noteID);
+      })
+    })
 })
