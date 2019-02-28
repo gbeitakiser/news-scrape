@@ -1,9 +1,10 @@
 <ul id="article">
-    <h3>{{headline}}</h3>
-    <p>{{summary}}</p>
+    <h3>Headline: {{headline}}</h3>
+    <p><b>Summary: </b>{{summary}}</p>
 
     <a href="{{link}}">Link</a>
-
+    <br>
+    <br>
     <div id="userinput">
         <b>Add Note</b>
         <br>
@@ -18,10 +19,10 @@
      <br>
             {{#each note}}
                 <u id="note-click" note-id="{{_id}}">Click Here To See Note</u>
-                <br>
+                <button id="delete" data-id="{{_id}}">Delete Note</button>
             {{/each}}
     {{else}}
-    <p>This article has no comments</p>
+    <p>This article has no notes.</p>
     {{/if}}
 </ul>
 <br>

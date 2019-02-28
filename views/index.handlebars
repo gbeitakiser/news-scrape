@@ -1,8 +1,18 @@
 <div class="wrapper">
       <h1>Positive News Articles...Have A Nice Day!</h1>
+
+      {{#if articles}}
+
+      <button id="scrape">Scrape for new articles!</button>
+
       <div id="articles">
             {{#each articles}}
                   {{> notes/notes-block }}
             {{/each}}
       </div>
+
+      {{else}}
+            <button id="scrape">Scrape for articles!</button>
+
+      {{/if}}
 </div>

@@ -132,6 +132,34 @@ app.post("/note/:id", function(req, res) {
 });
 
 
+app.delete("/note/:id", function(req, res) {
+    db.Note.deleteOne({
+        _id: req.params.id
+    }).then(function(dbNote) {
+        db.Article.findOneAndUpdate({
+            _id: req.params.id
+        },
+        {
+            $unset: {
+                note: dbNote._id
+            }
+        })
+    })
+    
+    
+    
+    
+    
+    
+    
+    .then(function(deleted) {
+        res.json(deleted)
+    }).catch(function(err) {
+        res.json(err)
+    })
+})
+
+
 // Start the server
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + "!");
