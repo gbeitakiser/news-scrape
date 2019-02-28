@@ -83,7 +83,6 @@ app.get("/note/:id", function(req, res) {
     db.Article.findOne({ _id: req.params.id })
       .populate("note")
       .then(function(dbArticle) {
-          console.log(dbArticle)
           res.json(dbArticle);
       })
       .catch(function(err) {
@@ -105,8 +104,7 @@ app.get("/note/api/:id", function(req, res) {
 app.post("/note/:id", function(req, res) {
     db.Note.create(req.body)
         .then(function(dbNote) {
-            console.log("req.params._id: " + req.params._id + "\n");
-            console.log("dbNote._id: " + dbNote._id + "\n");
+            // console.log("dbNote ID: " + dbNote._id);
             db.Article.findOneAndUpdate({
                 _id: req.params.id
             },
@@ -119,14 +117,11 @@ app.post("/note/:id", function(req, res) {
                 new: true
             })
             .then(function(dbArticle) {
-                res.json(dbArticle)
-                // console.log(".then function worked")
+                res.render("index");
             }).catch(function(err) {
-                // console.log("error 1")
                 res.json(err);
             })
         }).catch(function(err) {
-            // console.log("error 2")
             res.json(err);
         })
 });
@@ -136,31 +131,19 @@ app.delete("/note/:id", function(req, res) {
     db.Note.deleteOne({
         _id: req.params.id
     }).then(function(dbNote) {
-        db.Article.findOneAndUpdate({
-            _id: req.params.id
-        },
-        {
-            $unset: {
-                note: dbNote._id
-            }
+        console.log("req.params.id: " + req.params.id + "\n");
+        db.Article.findOneAndRemove({
+            note: req.params.id
         })
-    })
-    
-    
-    
-    
-    
-    
-    
-    .then(function(deleted) {
-        res.json(deleted)
+    }).then(function(deleted) {
+        res.json(deleted);
+        // res.render("index");
     }).catch(function(err) {
         res.json(err)
     })
 })
 
 
-// Start the server
 app.listen(PORT, function() {
     console.log("App running on port " + PORT + "!");
 });

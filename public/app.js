@@ -14,7 +14,7 @@ $(function() {
         url: "/note/" + articleID,
         data: notesBody
       }).then(function(data) {
-          window.location.replace("/note/" + data._id)
+          window.location.replace("/")
         });
     });
 
@@ -46,7 +46,6 @@ $(function() {
 
     $(document).on("click", "#delete", function() {
       event.preventDefault();
-      console.log("delete button works");
 
       var deleteID = $(this).attr("data-id");
 
@@ -54,7 +53,9 @@ $(function() {
         method: "DELETE",
         url: "/note/" + deleteID
       }).then(function(data) {
+        // window.location.replace("/note/api/" + deleteID);
         window.location.replace("/");
+
       })
 
     })
