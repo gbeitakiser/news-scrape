@@ -48,13 +48,15 @@ $(function() {
       event.preventDefault();
 
       var deleteID = $(this).attr("data-id");
+      var articleID = $(this).parent().attr("data-id");
 
       $.ajax({
         method: "DELETE",
-        url: "/note/" + deleteID
+        url: "/note/" + deleteID + "/" + articleID
       }).then(function(data) {
         // window.location.replace("/note/api/" + deleteID);
-        window.location.replace("/");
+        // window.location.replace("/");
+        console.log(data);
 
       })
 

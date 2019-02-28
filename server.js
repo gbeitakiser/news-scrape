@@ -127,18 +127,27 @@ app.post("/note/:id", function(req, res) {
 });
 
 
-app.delete("/note/:id", function(req, res) {
+app.delete("/note/:id/:articleID", function(req, res) {
     db.Note.deleteOne({
         _id: req.params.id
-    }).then(function(dbNote) {
+    }).then(function() {
+        console.log("req.params.articleID: " + req.params.articleID + "\n");
         console.log("req.params.id: " + req.params.id + "\n");
-        db.Article.findOneAndRemove({
-            note: req.params.id
+        db.Article.findOneAndUpdate({
+            _id: req.params.articleID
+        },{
+            $pull: {
+                note: req.params.id
+            }
         })
+
+        console.log("Done")
     }).then(function(deleted) {
+        console.log("promise 2 done")
         res.json(deleted);
-        // res.render("index");
-    }).catch(function(err) {
+        //res.render("index");
+    })
+    .catch(function(err) {
         res.json(err)
     })
 })
