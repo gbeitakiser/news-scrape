@@ -126,8 +126,8 @@ app.post("/note/:id", function(req, res) {
         })
 });
 
-
-app.delete("/note/:id/:articleID", function(req, res) {
+// Below could be DELETE
+app.get("/note/:id/:articleID", function(req, res) {
     db.Note.deleteOne({
         _id: req.params.id
     }).then(function() {
@@ -141,9 +141,7 @@ app.delete("/note/:id/:articleID", function(req, res) {
             }
         })
 
-        console.log("Done")
     }).then(function(deleted) {
-        console.log("promise 2 done")
         res.json(deleted);
         //res.render("index");
     })

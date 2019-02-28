@@ -51,7 +51,7 @@ $(function() {
       var articleID = $(this).parent().attr("data-id");
 
       $.ajax({
-        method: "DELETE",
+        method: "GET", // Could be DELETE
         url: "/note/" + deleteID + "/" + articleID
       }).then(function(data) {
         // window.location.replace("/note/api/" + deleteID);
