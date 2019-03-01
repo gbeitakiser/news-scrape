@@ -101,53 +101,26 @@ app.get("/note/api/:id", function(req, res) {
 })
 
 
-app.post("/note/:id", function(req, res) {
-    db.Note.create(req.body)
-        .then(function(dbNote) {
-            // console.log("dbNote ID: " + dbNote._id);
-            db.Article.findOneAndUpdate({
-                _id: req.params.id
-            },
-            {
-                $push: {
-                    note: dbNote._id
-                }
-            },
-            {
-                new: true
-            })
-            .then(function(dbArticle) {
-                res.render("index");
-            }).catch(function(err) {
-                res.json(err);
-            })
-        }).catch(function(err) {
-            res.json(err);
-        })
+app.post("/note/:id", async function(req, res) {
+    
+        const note = await db.Note.create(req.body)
+        await note.save();
+        const article = await db.Article.findById(req.params.id);
+    
+        article.note.push(note);
+        await article.save();
+        console.log(article);
+        res.render('index');
 });
 
 // Below could be DELETE
-app.get("/note/:id/:articleID", function(req, res) {
-    db.Note.deleteOne({
-        _id: req.params.id
-    }).then(function() {
-        console.log("req.params.articleID: " + req.params.articleID + "\n");
-        console.log("req.params.id: " + req.params.id + "\n");
-        db.Article.findOneAndUpdate({
-            _id: req.params.articleID
-        },{
-            $pull: {
-                note: req.params.id
-            }
-        })
-
-    }).then(function(deleted) {
-        res.json(deleted);
-        //res.render("index");
-    })
-    .catch(function(err) {
-        res.json(err)
-    })
+app.delete("/note/:id/:articleID", async function(req, res) {
+    const article = await db.Article.findById(req.params.articleID)
+    article.note.remove({_id: req.params.id})
+    await article.save();
+    const notes = await db.Note.deleteOne({_id: req.params.id});
+    console.log(notes);
+    res.render("index");
 })
 
 

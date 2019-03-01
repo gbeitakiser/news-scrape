@@ -51,11 +51,11 @@ $(function() {
       var articleID = $(this).parent().attr("data-id");
 
       $.ajax({
-        method: "GET", // Could be DELETE
+        method: "DELETE", // Could be DELETE
         url: "/note/" + deleteID + "/" + articleID
       }).then(function(data) {
         // window.location.replace("/note/api/" + deleteID);
-        // window.location.replace("/");
+        window.location.replace("/");
         console.log(data);
 
       })
